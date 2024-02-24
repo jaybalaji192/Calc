@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="main-container h-screen w-screen flex justify-center items-center">
+        <div class="calc-container w-[28rem] h-[43rem] ">
+            <div class="under relative">
+                <div class="display h-40 w-96 m-auto mt-10 ">
+
+                </div>
+                <div class="btn-container grid grid-cols-4 grid-rows-3 gap-5 mx-8 mt-8">
+                    <button>
+                        C
+                    </button>
+                    <button>
+                        /
+                    </button>
+                    <button>
+                        X
+                    </button>
+                    <button>
+                        b
+                    </button>
+                    <button>
+                        7
+                    </button>
+                    <button>
+                        8
+                    </button>
+                    <button>
+                        9
+                    </button>
+                    <button>
+                        -
+                    </button>
+                    <button>
+                        4
+                    </button>
+                    <button>
+                        5
+                    </button>
+                    <button>
+                        6
+                    </button>
+                    <button>
+                        +
+                    </button>
+                </div>
+                <div class="btn-container grid grid-cols-3 grid-rows-3 gap-5 mx-8 mr-32 mt-5">
+
+                    <button>
+                        1
+                    </button>
+                    <button>
+                        2
+                    </button>
+                    <button>
+                        3
+                    </button>
+                    <button>
+                        %
+                    </button>
+                    <button>
+                        0
+                    </button>
+                    <button>
+                        .
+                    </button>
+                </div>
+                <div class="absolute right-0 bottom-20 mr-10">
+                    <button class="ans-btn">
+                        =
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let exp = '';
+
+        function evalNdisplay(){
+            displayIt('');
+
+            const uri = 'https://jaybalaji192.pythonanywhere.com/eval';
+            const param = `${uri}?exp=${encodeURIComponent(exp.slice(0,exp.length-1))}`
+            console.log(param);
+            fetch(param).then(res => {
+                displayIt(res);
+            }).then(data => {
+                displayIt(data);
+            })
+            exp = '';
+        }
+
+        function displayIt(text) {
+            document.querySelector('.display').innerText = text;
+        }
+
+        document.querySelectorAll('button').forEach((button) => {
+            button.addEventListener('click', () => {
+                exp += button.innerText;
+                displayIt(exp)
+            });
+        });
+
+        document.addEventListener('keydown', (k) => {
+            <!-- console.log(k.key);  -->
+            //37-57
+            if (k.key.charCodeAt(0) > 36 && k.key.charCodeAt(0) < 58) {
+                exp += k.key
+                displayIt(exp);
+            }
+
+            if (k.key == '=' || k.key == 'Enter') {
+                evalNdisplay();
+            }
+
+        });
+
+        document.querySelector('.ans-btn').addEventListener('click', () => {
+            evalNdisplay();
+        });
+
+
+    </script>
+</body>
+
+</html>
